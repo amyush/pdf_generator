@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; color: #333; padding: 10px; }
+  .header { display: flex; justify-content: space-between; border-bottom: 3px solid #2e7d32; padding-bottom: 12px; margin-bottom: 15px; }
+  .company-name { font-size: 20px; font-weight: bold; color: #2e7d32; }
+  .company-details { font-size: 9px; color: #666; margin-top: 4px; line-height: 1.5; }
+  .doc-info { text-align: right; }
+  .doc-label { font-size: 9px; color: #888; text-transform: uppercase; }
+  .doc-number { font-size: 16px; font-weight: bold; color: #2e7d32; }
+  .doc-date { font-size: 10px; margin-top: 2px; }
+  .title { text-align: center; font-size: 14px; font-weight: bold; color: #2e7d32; text-transform: uppercase; letter-spacing: 2px; margin: 10px 0; }
+  .info-grid { display: flex; gap: 12px; margin-bottom: 15px; }
+  .info-box { flex: 1; border: 1px solid #ddd; border-radius: 4px; padding: 8px; }
+  .info-box h4 { font-size: 9px; text-transform: uppercase; color: #2e7d32; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 6px; letter-spacing: 1px; }
+  .info-box p { font-size: 10px; line-height: 1.6; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+  th { background: #2e7d32; color: #fff; padding: 6px 5px; text-align: left; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 5px; border-bottom: 1px solid #eee; font-size: 10px; }
+  tr:nth-child(even) { background: #f8f9fa; }
+  .text-right { text-align: right; }
+  .totals { margin-left: auto; width: 280px; margin-top: 10px; }
+  .totals-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 10px; }
+  .totals-row.grand { border-top: 2px solid #2e7d32; font-weight: bold; font-size: 13px; color: #2e7d32; padding-top: 6px; margin-top: 4px; }
+  .bank-details { margin-top: 20px; border: 1px solid #ddd; border-radius: 4px; padding: 10px; }
+  .bank-details h4 { font-size: 10px; color: #2e7d32; margin-bottom: 6px; }
+  .bank-details p { font-size: 10px; line-height: 1.6; }
+  .amount-words { background: #f0f7f0; padding: 6px 10px; border-radius: 4px; margin-top: 8px; font-size: 10px; }
+  .terms { margin-top: 20px; }
+  .terms h4 { font-size: 10px; color: #2e7d32; margin-bottom: 4px; }
+  .terms p { font-size: 9px; color: #666; line-height: 1.5; }
+  .signatures { display: flex; justify-content: space-between; margin-top: 40px; }
+  .sig-box { text-align: center; width: 180px; }
+  .sig-line { border-top: 1px solid #333; padding-top: 4px; font-size: 9px; color: #666; }
+  .page-info { text-align: center; font-size: 8px; color: #999; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+{{#if showHeader}}
+<div class="header">
+  <div>
+    <div class="company-name">{{company.name}}</div>
+    <div class="company-details">
+      {{company.address}}<br>
+      GSTIN: {{company.gstin}} | PAN: {{company.pan}}<br>
+      {{company.phone}} | {{company.email}}
+    </div>
+  </div>
+  <div class="doc-info">
+    <div class="doc-label">Tax Invoice</div>
+    <div class="doc-number">{{invoiceNumber}}</div>
+    <div class="doc-date">Date: {{formatDate date}}</div>
+    <div class="doc-date">Due: {{formatDate dueDate}}</div>
+  </div>
+</div>
+
+<div class="title">Tax Invoice</div>
+
+<div class="info-grid">
+  <div class="info-box">
+    <h4>Bill To</h4>
+    <p>
+      <strong>{{billTo.name}}</strong><br>
+      {{billTo.address}}<br>
+      GSTIN: {{billTo.gstin}}<br>
+      State: {{billTo.state}} ({{billTo.stateCode}})
+    </p>
+  </div>
+  <div class="info-box">
+    <h4>Ship To</h4>
+    <p>
+      <strong>{{shipTo.name}}</strong><br>
+      {{shipTo.address}}<br>
+      State: {{shipTo.state}} ({{shipTo.stateCode}})
+    </p>
+  </div>
+</div>
+{{/if}}
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:4%">#</th>
+      <th style="width:26%">Description</th>
+      <th style="width:8%">HSN</th>
+      <th style="width:6%">Qty</th>
+      <th style="width:6%">Unit</th>
+      <th style="width:12%" class="text-right">Rate</th>
+      <th style="width:10%" class="text-right">CGST</th>
+      <th style="width:10%" class="text-right">SGST</th>
+      <th style="width:14%" class="text-right">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each items}}
+    <tr>
+      <td>{{rowIndex @index}}</td>
+      <td>{{this.description}}</td>
+      <td>{{this.hsn}}</td>
+      <td>{{this.quantity}}</td>
+      <td>{{this.unit}}</td>
+      <td class="text-right">{{currency this.rate}}</td>
+      <td class="text-right">{{currency this.cgst}}</td>
+      <td class="text-right">{{currency this.sgst}}</td>
+      <td class="text-right">{{currency this.total}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+{{#if showSummary}}
+<div class="totals">
+  <div class="totals-row"><span>Subtotal:</span><span>{{currency subtotal}}</span></div>
+  <div class="totals-row"><span>CGST:</span><span>{{currency totalCgst}}</span></div>
+  <div class="totals-row"><span>SGST:</span><span>{{currency totalSgst}}</span></div>
+  {{#if totalIgst}}
+  <div class="totals-row"><span>IGST:</span><span>{{currency totalIgst}}</span></div>
+  {{/if}}
+  <div class="totals-row grand"><span>Grand Total:</span><span>{{currency grandTotal}}</span></div>
+</div>
+
+{{#if amountInWords}}
+<div class="amount-words"><strong>Amount in words:</strong> {{amountInWords}}</div>
+{{/if}}
+
+<div class="bank-details">
+  <h4>Bank Details</h4>
+  <p>
+    Bank: {{bank.name}}<br>
+    A/C No: {{bank.accountNo}}<br>
+    IFSC: {{bank.ifsc}}<br>
+    Branch: {{bank.branch}}
+  </p>
+</div>
+
+<div class="terms">
+  <h4>Terms & Conditions</h4>
+  {{#each terms}}
+  <p>{{rowIndex @index}}. {{this}}</p>
+  {{/each}}
+</div>
+
+<div class="signatures">
+  <div class="sig-box"><div class="sig-line">Receiver's Signature</div></div>
+  <div class="sig-box"><div class="sig-line">For {{company.name}}</div></div>
+</div>
+{{/if}}
+
+{{#if pageInfo}}
+<div class="page-info">Page {{pageInfo.current}} of {{pageInfo.total}}</div>
+{{/if}}
+
+</body>
+</html>
