@@ -102,7 +102,7 @@ Peak excess load stored in Redis queue
 Ensures system stability instead of failure under bursts
 
 > Consider: memory, CPU, storage, network bandwidth, queue depth.
-[Your response here]
+
 
 ## 4. Design Decisions (minimum 3)
 Decision 1: Asynchronous Processing via Queue (BullMQ + Redis)
@@ -182,7 +182,9 @@ Not suitable for production scenarios requiring durability, auditability, or lon
 
 ## 5. AI Usage Log
 > Public links of conversations you had with AI.
-https://chatgpt.com/share/69bb04c3-717c-8011-9739-c2ecb7127218
+
+- https://chatgpt.com/share/69bb04c3-717c-8011-9739-c2ecb7127218
+
 The development code is not copyable as it is in my company laptop
 I am using a integrated cursor tool for fast development.
 I first wrote down the steps
@@ -203,6 +205,7 @@ and also used its follow up msgs to add retries
 > What is the weakest part of your design? If you had 2 more days, what
 would you
 > improve? What would you change if this needed to support 10x the load?
+
 I believe weakest part of my design (considering from production grade):
 - In-memory job store is not durable
 - No automatic retry mechanism for failed jobs
@@ -230,6 +233,7 @@ Auto-scale based on queue depth
 > What's something important for a production deployment that wasn't
 called out in the
 > requirements? Why does it matter?
+
 Observability (logging, metrics, alerting)
 
 This is critical because:
