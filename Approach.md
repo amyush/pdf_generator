@@ -18,6 +18,7 @@ Data consistency across asynchronous workflows
 User experience under unreliable network conditions.
 
 > problem? What did you think the hard parts were?
+
 One of the primary challenges in this problem is balancing throughput and memory efficiency, a trade-off that is common even in lower-level system design but becomes significantly more critical in distributed systems. Given that each PDF generation consumes ~400MB of memory, maximizing throughput by increasing concurrency can quickly lead to resource exhaustion and system instability. Therefore, the design must carefully regulate concurrency to strike an optimal balance between processing speed and memory usage.
 
 Another key challenge—though less conceptual and more implementation-driven—was working with Puppeteer itself. While it is a powerful tool for HTML-to-PDF rendering, it introduces operational complexities, particularly around memory management and stability. Handling Puppeteer failures for large or complex documents (e.g., >500 line items) requires additional safeguards such as failure detection, retries, and potentially alternative rendering strategies to ensure reliability.
@@ -26,6 +27,7 @@ Another key challenge—though less conceptual and more implementation-driven—
 > List any assumptions you made. In a real scenario, what questions
 would you ask the
 > product team or engineering lead before starting?
+
 Assumptions -
 - Templates are predefined (Handlebars) and controlled internally
 - Bulk requests are capped at 100 documents
